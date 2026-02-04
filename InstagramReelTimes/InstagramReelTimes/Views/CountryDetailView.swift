@@ -3,6 +3,7 @@
 //  InstagramReelTimes
 //
 //  Detailed view showing best posting times for a specific country
+//  With PST conversion for ad scheduling
 //
 
 import SwiftUI
@@ -10,6 +11,7 @@ import SwiftUI
 struct CountryDetailView: View {
     let country: Country
     @State private var selectedDay: DayOfWeek?
+    @State private var showPSTTimes = true
 
     var timesForSelectedDay: [TimeSlot] {
         guard let day = selectedDay else {
@@ -19,11 +21,27 @@ struct CountryDetailView: View {
             .sorted { $0.engagementLevel < $1.engagementLevel }
     }
 
+    var pstTimesForSelectedDay: [PSTTimeSlot] {
+        guard let day = selectedDay else {
+            return country.allTimesPST.sorted { $0.originalSlot.engagementLevel < $1.originalSlot.engagementLevel }
+        }
+        return country.allTimesPST.filter { $0.pstDayOfWeek == day }
+            .sorted { $0.originalSlot.engagementLevel < $1.originalSlot.engagementLevel }
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
                 // Header
                 CountryHeaderView(country: country)
+
+                // Time Display Toggle
+                Picker("Time Display", selection: $showPSTTimes) {
+                    Text("PST Times").tag(true)
+                    Text("Local Times").tag(false)
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
 
                 // Day Selector
                 DaySelectorView(selectedDay: $selectedDay)
@@ -48,15 +66,28 @@ struct CountryDetailView: View {
                     }
                     .padding(.horizontal)
 
-                    if timesForSelectedDay.isEmpty {
-                        EmptyStateView(day: selectedDay)
-                    } else {
-                        LazyVStack(spacing: 12) {
-                            ForEach(timesForSelectedDay) { timeSlot in
-                                TimeSlotCard(timeSlot: timeSlot)
+                    if showPSTTimes {
+                        if pstTimesForSelectedDay.isEmpty {
+                            EmptyStateView(day: selectedDay)
+                        } else {
+                            LazyVStack(spacing: 12) {
+                                ForEach(pstTimesForSelectedDay) { pstSlot in
+                                    PSTTimeSlotCard(pstSlot: pstSlot)
+                                }
                             }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
+                    } else {
+                        if timesForSelectedDay.isEmpty {
+                            EmptyStateView(day: selectedDay)
+                        } else {
+                            LazyVStack(spacing: 12) {
+                                ForEach(timesForSelectedDay) { timeSlot in
+                                    TimeSlotCard(timeSlot: timeSlot)
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
                     }
                 }
 
@@ -250,6 +281,92 @@ struct TimeSlotCard: View {
                         .fill(engagementColor.opacity(0.15))
                 )
                 .foregroundColor(engagementColor)
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
+    }
+}
+
+struct PSTTimeSlotCard: View {
+    let pstSlot: PSTTimeSlot
+
+    var engagementColor: Color {
+        switch pstSlot.originalSlot.engagementLevel {
+        case .peak:
+            return .orange
+        case .high:
+            return .blue
+        case .moderate:
+            return .gray
+        }
+    }
+
+    var engagementIcon: String {
+        switch pstSlot.originalSlot.engagementLevel {
+        case .peak:
+            return "flame.fill"
+        case .high:
+            return "arrow.up.circle.fill"
+        case .moderate:
+            return "circle.fill"
+        }
+    }
+
+    var body: some View {
+        HStack(spacing: 16) {
+            // Engagement Indicator
+            VStack {
+                Image(systemName: engagementIcon)
+                    .font(.title2)
+                    .foregroundColor(engagementColor)
+            }
+            .frame(width: 44)
+
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 4) {
+                    Text(pstSlot.pstDayOfWeek.rawValue)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+
+                    Text("PST")
+                        .font(.caption2)
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 2)
+                        .background(Color("AccentColor").opacity(0.2))
+                        .cornerRadius(4)
+                        .foregroundColor(Color("AccentColor"))
+                }
+
+                Text(pstSlot.pstTimeRange)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+
+                Text("Local: \(pstSlot.originalSlot.dayOfWeek.shortName) \(pstSlot.originalSlot.timeRange)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Spacer()
+
+            // Engagement Badge
+            VStack(alignment: .trailing, spacing: 4) {
+                Text(pstSlot.originalSlot.engagementLevel.rawValue)
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule()
+                            .fill(engagementColor.opacity(0.15))
+                    )
+                    .foregroundColor(engagementColor)
+
+                Text(pstSlot.originalSlot.engagementLevel.followerPotential)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
         }
         .padding()
         .background(Color(.systemBackground))

@@ -3,6 +3,7 @@
 //  InstagramReelTimes
 //
 //  Main entry view with tab navigation
+//  Optimized for ad scheduling in PST timezone
 //
 
 import SwiftUI
@@ -10,6 +11,11 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
+            AdRecommendationView()
+                .tabItem {
+                    Label("Schedule", systemImage: "megaphone.fill")
+                }
+
             CountryListView()
                 .tabItem {
                     Label("Countries", systemImage: "globe")
@@ -17,7 +23,7 @@ struct ContentView: View {
 
             BestTimesOverviewView()
                 .tabItem {
-                    Label("Best Times", systemImage: "clock.fill")
+                    Label("Insights", systemImage: "chart.bar.fill")
                 }
 
             TipsView()
