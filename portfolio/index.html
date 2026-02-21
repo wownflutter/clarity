@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>curtis.is — Design Leader</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        color: #1a1a1a;
+        background: #ffffff;
+      }
+
+      .container {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 48px;
+      }
+
+      /* ── Navbar ── */
+      .navbar {
+        background: #1c1c1c;
+        padding: 18px 0;
+      }
+
+      .navbar__inner {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 48px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .navbar__logo {
+        font-size: 18px;
+        font-weight: 800;
+        color: #ffffff;
+        text-decoration: none;
+        letter-spacing: -0.3px;
+      }
+
+      .navbar__links {
+        display: flex;
+        list-style: none;
+        gap: 30px;
+      }
+
+      .navbar__links a {
+        text-decoration: none;
+        color: #ffffff;
+        font-size: 14.5px;
+        font-weight: 400;
+        transition: color 0.15s;
+      }
+
+      .navbar__links a:hover {
+        color: #e07a2f;
+      }
+
+      .navbar__links a.active {
+        color: #e07a2f;
+        font-weight: 600;
+      }
+
+      /* ── Hero ── */
+      .hero {
+        background: #ffffff;
+        padding: 82px 0 56px;
+      }
+
+      .hero__heading {
+        font-size: 36px;
+        font-weight: 800;
+        line-height: 1.22;
+        color: #1a1a1a;
+        margin-bottom: 22px;
+        letter-spacing: -0.4px;
+      }
+
+      .hero__sub {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.72;
+        color: #1a1a1a;
+        max-width: 640px;
+      }
+
+      /* ── Services ── */
+      .services {
+        background: #ffffff;
+        padding: 48px 0 88px;
+      }
+
+      .services__grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 36px;
+        text-align: center;
+      }
+
+      .service__icon {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 14px;
+      }
+
+      .service__icon svg {
+        width: 64px;
+        height: 60px;
+      }
+
+      .service__title {
+        font-size: 15.5px;
+        font-weight: 700;
+        color: #e07a2f;
+        margin-bottom: 12px;
+      }
+
+      .service__desc {
+        font-size: 13px;
+        line-height: 1.7;
+        color: #444444;
+      }
+
+      /* ── Portfolio ── */
+      .portfolio {
+        background: #f0f0f0;
+        padding: 80px 0 88px;
+      }
+
+      .portfolio__heading {
+        font-size: 34px;
+        font-weight: 700;
+        color: #e07a2f;
+        text-align: center;
+        margin-bottom: 48px;
+        letter-spacing: -0.3px;
+      }
+
+      .portfolio__grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .portfolio__item {
+        height: 296px;
+        border-radius: 5px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .portfolio__item:hover .portfolio__overlay {
+        opacity: 1;
+      }
+
+      .portfolio__overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.25s;
+      }
+
+      .portfolio__overlay span {
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+
+      /* placeholder fills */
+      .fill-light-blue  { background: linear-gradient(145deg, #c8d8e8 0%, #a8bcd4 100%); }
+      .fill-dark-navy   { background: linear-gradient(145deg, #0d1b2e 0%, #122540 60%, #0a1520 100%); }
+      .fill-warm-grey   { background: linear-gradient(145deg, #d5cfc8 0%, #c0b8b0 100%); }
+      .fill-colorful    { background: linear-gradient(145deg, #e8e0d8 0%, #d8ccc0 100%); }
+
+      /* placeholder inner content */
+      .placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .placeholder__label {
+        font-size: 13px;
+        font-weight: 600;
+        opacity: 0.55;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      /* ── Icons ── */
+      const CatalystIcon = () => (
+        <svg viewBox="0 0 70 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* center person */}
+          <circle cx="35" cy="14" r="9.5" stroke="#1a1a1a" strokeWidth="2.5" />
+          <path d="M15 52 C15 37 55 37 55 52" stroke="#1a1a1a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          {/* left person */}
+          <circle cx="13" cy="18" r="7" stroke="#1a1a1a" strokeWidth="2.2" />
+          <path d="M1 52 C1 40 21 40 25 44" stroke="#1a1a1a" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+          {/* right person */}
+          <circle cx="57" cy="18" r="7" stroke="#1a1a1a" strokeWidth="2.2" />
+          <path d="M45 44 C49 40 69 40 69 52" stroke="#1a1a1a" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+        </svg>
+      );
+
+      const EarIcon = () => (
+        <svg viewBox="0 0 68 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* ear body */}
+          <path
+            d="M30 8 C17 8 9 20 9 33 C9 45 17 55 27 58 C31 59.5 33 64 33 64 L41 64 C41 64 39 57 35 53 C31 49 28 41 30 34 C32 27 39 25 44 30 C49 35 46 45 41 47 C38 48 36 45 36 42 L36 37 C36 32 33 29 30 33"
+            stroke="#1a1a1a"
+            strokeWidth="2.5"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          {/* sound waves */}
+          <path d="M50 23 C56 29 56 39 50 45" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <path d="M57 16 C65 24 65 40 57 48" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+        </svg>
+      );
+
+      const SolverIcon = () => (
+        <svg viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="34" cy="34" r="27" stroke="#1a1a1a" strokeWidth="2.5" />
+          {/* medical cross */}
+          <rect x="30" y="20" width="8" height="28" rx="2" fill="#1a1a1a" />
+          <rect x="20" y="30" width="28" height="8" rx="2" fill="#1a1a1a" />
+        </svg>
+      );
+
+      const NorthStarIcon = () => (
+        <svg viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M34 5 L38.5 29.5 L63 34 L38.5 38.5 L34 63 L29.5 38.5 L5 34 L29.5 29.5 Z" fill="#1a1a1a" />
+        </svg>
+      );
+
+      /* ── Portfolio placeholder ── */
+      const PlaceholderItem = ({ fillClass, label, dark }) => (
+        <div className={`portfolio__item ${fillClass}`}>
+          <div className="placeholder">
+            <span className="placeholder__label" style={{ color: dark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.4)' }}>
+              {label}
+            </span>
+          </div>
+          <div className="portfolio__overlay">
+            <span>View Project</span>
+          </div>
+        </div>
+      );
+
+      /* ── App ── */
+      const App = () => {
+        const [activeNav, setActiveNav] = React.useState('My Process');
+
+        const navItems = ['My Process', 'Work', 'Social Feeds', 'Contact'];
+
+        const services = [
+          {
+            icon: <CatalystIcon />,
+            title: 'Catalyst',
+            desc: 'Serving as a catalyst for team synergy and brand awareness. Elevating the team conversation and growing the skillset.',
+          },
+          {
+            icon: <EarIcon />,
+            title: 'User Evangelist',
+            desc: 'We are the voice of the user, always pursuing the most intuitive product experience and brand adoption.',
+          },
+          {
+            icon: <SolverIcon />,
+            title: 'Solver',
+            desc: 'Delivering solid, proven execution based on data-driven user research analysis and market validation.',
+          },
+          {
+            icon: <NorthStarIcon />,
+            title: 'North Star Guide',
+            desc: 'Providing a vision for the future state (+ Escape Velocity), while satisfying product design and business goals.',
+          },
+        ];
+
+        const projects = [
+          { fillClass: 'fill-light-blue', label: 'Maps / Geo Dashboard', dark: false },
+          { fillClass: 'fill-dark-navy', label: 'AI Security Dashboard', dark: true },
+          { fillClass: 'fill-warm-grey', label: 'Enterprise Product Suite', dark: false },
+          { fillClass: 'fill-colorful', label: 'Consumer Experience', dark: false },
+        ];
+
+        return (
+          <div>
+            {/* Navbar */}
+            <nav className="navbar">
+              <div className="navbar__inner">
+                <a href="#" className="navbar__logo">
+                  curtis.is
+                </a>
+                <ul className="navbar__links">
+                  {navItems.map(item => (
+                    <li key={item}>
+                      <a
+                        href="#"
+                        className={activeNav === item ? 'active' : ''}
+                        onClick={e => {
+                          e.preventDefault();
+                          setActiveNav(item);
+                        }}
+                      >
+                        {item}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </nav>
+
+            {/* Hero */}
+            <section className="hero">
+              <div className="container">
+                <h1 className="hero__heading">Design leader. Team builder. User evangelist.</h1>
+                <p className="hero__sub">
+                  I design intuitive, scalable experiences where AI and agent workflows support faster decisions, deeper
+                  insight, and more valuable outcomes.
+                </p>
+              </div>
+            </section>
+
+            {/* Services */}
+            <section className="services">
+              <div className="container">
+                <div className="services__grid">
+                  {services.map(s => (
+                    <div key={s.title}>
+                      <div className="service__icon">{s.icon}</div>
+                      <div className="service__title">{s.title}</div>
+                      <p className="service__desc">{s.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Portfolio */}
+            <section className="portfolio">
+              <div className="container">
+                <h2 className="portfolio__heading">Select Product Design Work</h2>
+                <div className="portfolio__grid">
+                  {projects.map(p => (
+                    <PlaceholderItem key={p.label} fillClass={p.fillClass} label={p.label} dark={p.dark} />
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
