@@ -2,16 +2,19 @@
 //  InstagramReelTimesApp.swift
 //  InstagramReelTimes
 //
-//  Best Times to Post Instagram Reels by Country
+//  Artwork Review App
 //
 
 import SwiftUI
 
 @main
 struct InstagramReelTimesApp: App {
+    @StateObject private var ratingStore = RatingStore()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(ratingStore)
         }
     }
 }

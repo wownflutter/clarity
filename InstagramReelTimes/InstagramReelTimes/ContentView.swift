@@ -2,33 +2,24 @@
 //  ContentView.swift
 //  InstagramReelTimes
 //
-//  Main entry view with tab navigation
-//  Optimized for ad scheduling in PST timezone
+//  Main tab navigation for the Artwork Review app
 //
 
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var ratingStore: RatingStore
+
     var body: some View {
         TabView {
-            AdRecommendationView()
+            ArtworkGalleryView()
                 .tabItem {
-                    Label("Schedule", systemImage: "megaphone.fill")
+                    Label("Gallery", systemImage: "photo.stack")
                 }
 
-            CountryListView()
+            MyRatingsView()
                 .tabItem {
-                    Label("Countries", systemImage: "globe")
-                }
-
-            BestTimesOverviewView()
-                .tabItem {
-                    Label("Insights", systemImage: "chart.bar.fill")
-                }
-
-            TipsView()
-                .tabItem {
-                    Label("Tips", systemImage: "lightbulb.fill")
+                    Label("My Ratings", systemImage: "star.fill")
                 }
         }
         .tint(Color("AccentColor"))
@@ -37,4 +28,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(RatingStore())
 }
