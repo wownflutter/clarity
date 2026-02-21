@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Curtissss</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-primary: #0d0f14;
+      --bg-secondary: #161922;
+      --bg-card: #1e222d;
+      --bg-card-hover: #252a38;
+      --accent: #6c63ff;
+      --accent-light: #8b85ff;
+      --accent-glow: rgba(108, 99, 255, 0.25);
+      --text-primary: #e8eaf0;
+      --text-secondary: #8890a4;
+      --text-muted: #555d70;
+      --border: #2a2f3e;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #38bdf8;
+      --tab-active-bg: #6c63ff;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Header / Logo ── */
+    header {
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), #a855f7);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: #fff;
+      letter-spacing: -1px;
+      box-shadow: 0 0 18px var(--accent-glow);
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.5px;
+    }
+
+    .logo-text span {
+      color: var(--accent-light);
+    }
+
+    .header-tagline {
+      margin-left: auto;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Main layout ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    /* ── Tab navigation ── */
+    .tabs {
+      display: flex;
+      gap: 0.4rem;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 6px;
+      margin-bottom: 2rem;
+      width: fit-content;
+    }
+
+    .tab-btn {
+      padding: 0.6rem 1.6rem;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-card);
+    }
+
+    .tab-btn.active {
+      background: var(--tab-active-bg);
+      color: #fff;
+      box-shadow: 0 2px 12px var(--accent-glow);
+    }
+
+    .tab-icon {
+      font-size: 1rem;
+    }
+
+    /* ── Tab panels ── */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Shared card ── */
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-value {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+
+    .card-delta {
+      font-size: 0.82rem;
+      margin-top: 0.3rem;
+      font-weight: 600;
+    }
+
+    .delta-up   { color: var(--success); }
+    .delta-down { color: var(--danger); }
+
+    /* ── Grid helpers ── */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ── Section heading ── */
+    .section-heading {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Table ── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .data-table thead th {
+      text-align: left;
+      padding: 0.65rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .data-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .data-table tbody tr:hover {
+      background-color: var(--bg-card-hover);
+    }
+
+    .data-table td {
+      padding: 0.75rem 1rem;
+      color: var(--text-secondary);
+    }
+
+    .data-table td:first-child {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .badge-green  { background: rgba(34,197,94,0.15);  color: var(--success); }
+    .badge-red    { background: rgba(239,68,68,0.15);   color: var(--danger); }
+    .badge-yellow { background: rgba(245,158,11,0.15);  color: var(--warning); }
+    .badge-blue   { background: rgba(56,189,248,0.15);  color: var(--info); }
+    .badge-purple { background: rgba(108,99,255,0.15);  color: var(--accent-light); }
+
+    /* ── Progress bar ── */
+    .progress-bar-wrap {
+      background: var(--bg-primary);
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), #a855f7);
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .progress-item {
+      margin-bottom: 1rem;
+    }
+
+    /* ── Alert box ── */
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.9rem 1.1rem;
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .alert-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .alert-title { font-weight: 700; margin-bottom: 0.1rem; }
+    .alert-body  { color: var(--text-secondary); }
+
+    .alert-danger  { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.3); }
+    .alert-warning { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); }
+    .alert-info    { background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.3); }
+
+    /* ── Mini sparkline ── */
+    .sparkline-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sparkline-bar {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 32px;
+    }
+
+    .sparkline-bar span {
+      width: 6px;
+      border-radius: 2px;
+      background: var(--accent);
+      opacity: 0.7;
+      display: block;
+      transition: opacity 0.2s;
+    }
+
+    .sparkline-bar span:hover { opacity: 1; }
+
+    /* ── Donut chart (CSS only) ── */
+    .donut-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .donut {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--accent)   0% 38%,
+        #a855f7        38% 61%,
+        var(--info)    61% 78%,
+        var(--success) 78% 100%
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .donut-inner {
+      width: 68px;
+      height: 68px;
+      background: var(--bg-card);
+      border-radius: 50%;
+    }
+
+    .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Page title ── */
+    .page-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.3rem;
+    }
+
+    .page-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ───────────────── HEADER ───────────────── -->
+  <header>
+    <div class="logo-mark">C</div>
+    <span class="logo-text">Curtiss<span>ss</span></span>
+    <span class="header-tagline">Enterprise Analytics Platform &nbsp;·&nbsp; v4.2.1</span>
+  </header>
+
+  <!-- ───────────────── MAIN ───────────────── -->
+  <main>
+
+    <!-- Tab navigation -->
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" role="tab" onclick="switchTab('drugs', this)">
+        <span class="tab-icon">💊</span> Drugs
+      </button>
+      <button class="tab-btn" role="tab" onclick="switchTab('money', this)">
+        <span class="tab-icon">💵</span> Money
+      </button>
+      <button class="tab-btn" role="tab" onclick="switchTab('finances', this)">
+        <span class="tab-icon">📊</span> Finances
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         TAB 1 — DRUGS
+    ═══════════════════════════════════════════ -->
+    <div id="tab-drugs" class="tab-panel active" role="tabpanel">
+
+      <div class="page-title">Pharmaceutical Pipeline</div>
+      <div class="page-subtitle">Curtissss Drug Development &amp; Compliance Dashboard &nbsp;·&nbsp; Q1 2026</div>
+
+      <!-- KPI row -->
+      <div class="grid-4">
+        <div class="card">
+          <div class="card-title">Active Compounds</div>
+          <div class="card-value">248</div>
+          <div class="card-delta delta-up">▲ 12 this quarter</div>
+        </div>
+        <div class="card">
+          <div class="card-title">In Clinical Trials</div>
+          <div class="card-value">37</div>
+          <div class="card-delta delta-up">▲ 5 from last quarter</div>
+        </div>
+        <div class="card">
+          <div class="card-title">FDA Submissions</div>
+          <div class="card-value">9</div>
+          <div class="card-delta delta-down">▼ 2 pending review</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Adverse Events</div>
+          <div class="card-value">14</div>
+          <div class="card-delta delta-down">▼ 3 new reports</div>
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="section-heading">Active Alerts</div>
+        <div class="alert alert-danger">
+          <span class="alert-icon">🚨</span>
+          <div>
+            <div class="alert-title">Recall Notice — Lot #RX-7741</div>
+            <div class="alert-body">Metaxalone 800mg tablets recalled due to potential contamination. 14,200 units affected across 6 distribution centres.</div>
+          </div>
+        </div>
+        <div class="alert alert-warning">
+          <span class="alert-icon">⚠️</span>
+          <div>
+            <div class="alert-title">Phase III Trial Delay — CRT-0092</div>
+            <div class="alert-body">Enrolment shortfall of 18% for compound CRT-0092. Projected trial completion pushed to Q3 2026.</div>
+          </div>
+        </div>
+        <div class="alert alert-info">
+          <span class="alert-icon">ℹ️</span>
+          <div>
+            <div class="alert-title">Regulatory Update — EMA Guidance Rev 14</div>
+            <div class="alert-body">New pharmacovigilance requirements effective 1 Apr 2026. Compliance team review scheduled for 28 Feb.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline table -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="section-heading">Pipeline Overview</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Compound</th>
+              <th>Therapeutic Area</th>
+              <th>Phase</th>
+              <th>Target Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CRT-0041</td>
+              <td>Oncology</td>
+              <td>Phase III</td>
+              <td>Jun 2026</td>
+              <td><span class="badge badge-green">On Track</span></td>
+            </tr>
+            <tr>
+              <td>CRT-0092</td>
+              <td>Neurology</td>
+              <td>Phase III</td>
+              <td>Q3 2026</td>
+              <td><span class="badge badge-yellow">Delayed</span></td>
+            </tr>
+            <tr>
+              <td>CRT-0118</td>
+              <td>Cardiology</td>
+              <td>Phase II</td>
+              <td>Dec 2026</td>
+              <td><span class="badge badge-green">On Track</span></td>
+            </tr>
+            <tr>
+              <td>CRT-0203</td>
+              <td>Immunology</td>
+              <td>Phase I</td>
+              <td>Mar 2027</td>
+              <td><span class="badge badge-blue">Enrolment</span></td>
+            </tr>
+            <tr>
+              <td>CRT-0277</td>
+              <td>Rare Disease</td>
+              <td>Pre-clinical</td>
+              <td>Q1 2028</td>
+              <td><span class="badge badge-purple">Research</span></td>
+            </tr>
+            <tr>
+              <td>CRT-0315</td>
+              <td>Infectious Disease</td>
+              <td>Phase I</td>
+              <td>Sep 2027</td>
+              <td><span class="badge badge-red">Halted</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Approval progress -->
+      <div class="card">
+        <div class="section-heading">Regulatory Approval Progress</div>
+        <div class="progress-item">
+          <div class="progress-label"><span>CRT-0041 — FDA</span><span>82%</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:82%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>CRT-0118 — EMA</span><span>55%</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:55%;background:linear-gradient(90deg,#a855f7,var(--info))"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>CRT-0092 — FDA</span><span>34%</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:34%;background:linear-gradient(90deg,var(--warning),#e85d04)"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>CRT-0203 — Health Canada</span><span>18%</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:18%;background:linear-gradient(90deg,var(--info),#0ea5e9)"></div></div>
+        </div>
+      </div>
+
+    </div><!-- /tab-drugs -->
+
+    <!-- ═══════════════════════════════════════════
+         TAB 2 — MONEY
+    ═══════════════════════════════════════════ -->
+    <div id="tab-money" class="tab-panel" role="tabpanel">
+
+      <div class="page-title">Money &amp; Transactions</div>
+      <div class="page-subtitle">Curtissss Treasury Operations &nbsp;·&nbsp; February 2026</div>
+
+      <!-- KPI row -->
+      <div class="grid-4">
+        <div class="card">
+          <div class="card-title">Cash on Hand</div>
+          <div class="card-value">$4.83B</div>
+          <div class="card-delta delta-up">▲ +$210M vs Jan</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Monthly Revenue</div>
+          <div class="card-value">$1.17B</div>
+          <div class="card-delta delta-up">▲ +8.4% YoY</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Monthly Expenses</div>
+          <div class="card-value">$892M</div>
+          <div class="card-delta delta-down">▲ +3.1% vs Jan</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Net Cash Flow</div>
+          <div class="card-value">$278M</div>
+          <div class="card-delta delta-up">▲ +14.2% MoM</div>
+        </div>
+      </div>
+
+      <!-- Sparkline + donut row -->
+      <div class="grid-2">
+
+        <div class="card">
+          <div class="section-heading">Weekly Revenue Trend</div>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <div style="font-size:0.82rem;color:var(--text-muted);">Feb 2026 — amounts in $M</div>
+            <div class="sparkline-bar">
+              <span style="height:40%"></span>
+              <span style="height:55%"></span>
+              <span style="height:48%"></span>
+              <span style="height:70%"></span>
+              <span style="height:63%"></span>
+              <span style="height:85%"></span>
+              <span style="height:72%"></span>
+              <span style="height:90%"></span>
+              <span style="height:78%"></span>
+              <span style="height:100%;opacity:1;background:var(--success)"></span>
+            </div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">Week 1 &nbsp;→&nbsp; Week 10 &nbsp;(current)</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-heading">Revenue by Segment</div>
+          <div class="donut-wrap">
+            <div class="donut"><div class="donut-inner"></div></div>
+            <div class="donut-legend">
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--accent)"></div>
+                Branded Pharma 38%
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:#a855f7"></div>
+                Generics 23%
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--info)"></div>
+                Devices 17%
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--success)"></div>
+                Services 22%
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Transaction table -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="section-heading">Recent Large Transactions</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>20 Feb 2026</td>
+              <td>QuantumBio Acquisition Tranche 2</td>
+              <td>M&amp;A</td>
+              <td style="color:var(--danger)">−$340M</td>
+              <td><span class="badge badge-green">Settled</span></td>
+            </tr>
+            <tr>
+              <td>18 Feb 2026</td>
+              <td>US Hospital Network Contract</td>
+              <td>Revenue</td>
+              <td style="color:var(--success)">+$215M</td>
+              <td><span class="badge badge-green">Settled</span></td>
+            </tr>
+            <tr>
+              <td>15 Feb 2026</td>
+              <td>Manufacturing Facility Upgrade</td>
+              <td>CapEx</td>
+              <td style="color:var(--danger)">−$88M</td>
+              <td><span class="badge badge-yellow">Pending</span></td>
+            </tr>
+            <tr>
+              <td>12 Feb 2026</td>
+              <td>EU Distribution Rights Sale</td>
+              <td>Revenue</td>
+              <td style="color:var(--success)">+$127M</td>
+              <td><span class="badge badge-green">Settled</span></td>
+            </tr>
+            <tr>
+              <td>10 Feb 2026</td>
+              <td>Payroll — Global (Feb)</td>
+              <td>OpEx</td>
+              <td style="color:var(--danger)">−$62M</td>
+              <td><span class="badge badge-green">Settled</span></td>
+            </tr>
+            <tr>
+              <td>05 Feb 2026</td>
+              <td>R&amp;D Grant — NIH</td>
+              <td>Grant</td>
+              <td style="color:var(--success)">+$45M</td>
+              <td><span class="badge badge-blue">In Review</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Accounts -->
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">Operating Account</div>
+          <div class="card-value">$1.24B</div>
+          <div class="card-delta delta-up">JPMorgan Chase · USD</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Reserve Account</div>
+          <div class="card-value">$2.91B</div>
+          <div class="card-delta" style="color:var(--text-muted)">Goldman Sachs · Multi-currency</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Escrow (M&amp;A)</div>
+          <div class="card-value">$680M</div>
+          <div class="card-delta delta-down">Locked until Q2 2026</div>
+        </div>
+      </div>
+
+    </div><!-- /tab-money -->
+
+    <!-- ═══════════════════════════════════════════
+         TAB 3 — FINANCES
+    ═══════════════════════════════════════════ -->
+    <div id="tab-finances" class="tab-panel" role="tabpanel">
+
+      <div class="page-title">Financial Statements</div>
+      <div class="page-subtitle">Curtissss Holdings Ltd. &nbsp;·&nbsp; FY 2025 Audited Results &amp; Q1 2026 Forecast</div>
+
+      <!-- KPI row -->
+      <div class="grid-4">
+        <div class="card">
+          <div class="card-title">FY 2025 Revenue</div>
+          <div class="card-value">$13.6B</div>
+          <div class="card-delta delta-up">▲ +11.3% YoY</div>
+        </div>
+        <div class="card">
+          <div class="card-title">EBITDA</div>
+          <div class="card-value">$4.1B</div>
+          <div class="card-delta delta-up">Margin 30.1%</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Net Income</div>
+          <div class="card-value">$2.7B</div>
+          <div class="card-delta delta-up">▲ +9.8% YoY</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Total Debt</div>
+          <div class="card-value">$6.2B</div>
+          <div class="card-delta delta-down">D/E ratio 0.74</div>
+        </div>
+      </div>
+
+      <!-- P&L summary -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="section-heading">Income Statement — FY 2025 vs FY 2024 (USD Millions)</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Line Item</th>
+              <th>FY 2025</th>
+              <th>FY 2024</th>
+              <th>Change</th>
+              <th>% Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Gross Revenue</td>
+              <td>$13,622</td>
+              <td>$12,240</td>
+              <td style="color:var(--success)">+$1,382</td>
+              <td style="color:var(--success)">+11.3%</td>
+            </tr>
+            <tr>
+              <td>Cost of Goods Sold</td>
+              <td>$5,488</td>
+              <td>$5,010</td>
+              <td style="color:var(--danger)">+$478</td>
+              <td style="color:var(--danger)">+9.5%</td>
+            </tr>
+            <tr>
+              <td>Gross Profit</td>
+              <td>$8,134</td>
+              <td>$7,230</td>
+              <td style="color:var(--success)">+$904</td>
+              <td style="color:var(--success)">+12.5%</td>
+            </tr>
+            <tr>
+              <td>R&amp;D Expenses</td>
+              <td>$1,920</td>
+              <td>$1,740</td>
+              <td style="color:var(--danger)">+$180</td>
+              <td style="color:var(--danger)">+10.3%</td>
+            </tr>
+            <tr>
+              <td>SG&amp;A</td>
+              <td>$2,110</td>
+              <td>$1,980</td>
+              <td style="color:var(--danger)">+$130</td>
+              <td style="color:var(--danger)">+6.6%</td>
+            </tr>
+            <tr>
+              <td>Operating Income (EBIT)</td>
+              <td>$4,104</td>
+              <td>$3,510</td>
+              <td style="color:var(--success)">+$594</td>
+              <td style="color:var(--success)">+16.9%</td>
+            </tr>
+            <tr>
+              <td>Interest Expense</td>
+              <td>$310</td>
+              <td>$295</td>
+              <td style="color:var(--danger)">+$15</td>
+              <td style="color:var(--danger)">+5.1%</td>
+            </tr>
+            <tr>
+              <td>Tax Provision</td>
+              <td>$1,094</td>
+              <td>$942</td>
+              <td style="color:var(--danger)">+$152</td>
+              <td style="color:var(--danger)">+16.1%</td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-primary);font-weight:800;">Net Income</td>
+              <td style="color:var(--text-primary);font-weight:700;">$2,700</td>
+              <td style="color:var(--text-primary);font-weight:700;">$2,273</td>
+              <td style="color:var(--success);font-weight:700;">+$427</td>
+              <td style="color:var(--success);font-weight:700;">+18.8%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Balance sheet + ratios -->
+      <div class="grid-2">
+
+        <div class="card">
+          <div class="section-heading">Balance Sheet Snapshot</div>
+          <div class="progress-item">
+            <div class="progress-label"><span>Current Assets</span><span>$7.4B</span></div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:74%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label"><span>Total Assets</span><span>$24.1B</span></div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--accent),#a855f7)"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label"><span>Current Liabilities</span><span>$3.1B</span></div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:31%;background:linear-gradient(90deg,var(--warning),#e85d04)"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label"><span>Total Liabilities</span><span>$9.8B</span></div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:49%;background:linear-gradient(90deg,var(--danger),#b91c1c)"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-label"><span>Shareholders' Equity</span><span>$14.3B</span></div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:71%;background:linear-gradient(90deg,var(--success),#16a34a)"></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-heading">Key Financial Ratios</div>
+          <table class="data-table">
+            <thead>
+              <tr><th>Ratio</th><th>Value</th><th>vs Industry</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Current Ratio</td>
+                <td>2.39</td>
+                <td><span class="badge badge-green">Above avg</span></td>
+              </tr>
+              <tr>
+                <td>Quick Ratio</td>
+                <td>1.84</td>
+                <td><span class="badge badge-green">Above avg</span></td>
+              </tr>
+              <tr>
+                <td>Gross Margin</td>
+                <td>59.7%</td>
+                <td><span class="badge badge-green">Top quartile</span></td>
+              </tr>
+              <tr>
+                <td>Net Margin</td>
+                <td>19.8%</td>
+                <td><span class="badge badge-blue">In line</span></td>
+              </tr>
+              <tr>
+                <td>ROE</td>
+                <td>18.9%</td>
+                <td><span class="badge badge-green">Above avg</span></td>
+              </tr>
+              <tr>
+                <td>P/E Ratio</td>
+                <td>22.4×</td>
+                <td><span class="badge badge-yellow">Slightly high</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Q1 Forecast -->
+      <div class="card">
+        <div class="section-heading">Q1 2026 Forecast vs Q1 2025 Actual</div>
+        <div class="grid-3" style="margin-bottom:0">
+          <div>
+            <div class="card-title">Revenue Forecast</div>
+            <div class="card-value" style="font-size:1.4rem">$3.55B</div>
+            <div class="card-delta delta-up">▲ +9.2% vs Q1 2025</div>
+          </div>
+          <div>
+            <div class="card-title">EBITDA Forecast</div>
+            <div class="card-value" style="font-size:1.4rem">$1.07B</div>
+            <div class="card-delta delta-up">Margin target 30.1%</div>
+          </div>
+          <div>
+            <div class="card-title">EPS Forecast</div>
+            <div class="card-value" style="font-size:1.4rem">$1.84</div>
+            <div class="card-delta delta-up">▲ +12.2% vs Q1 2025</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-finances -->
+
+  </main>
+
+  <script>
+    function switchTab(name, btn) {
+      // hide all panels
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      // deactivate all buttons
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      // activate selected
+      document.getElementById('tab-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
